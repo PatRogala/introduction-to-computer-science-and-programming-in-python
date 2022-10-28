@@ -11,7 +11,7 @@ Check out the [course](https://ocw.mit.edu/courses/6-0001-introduction-to-comput
 | Project       | Status |
 |:--------------|:------:|
 | Problem Set 0 |   ✅    |
-| Problem Set 1 |   ❌    |
+| Problem Set 1 |   ✅    |
 | Problem Set 2 |   ❌    |
 | Problem Set 3 |   ❌    |
 | Problem Set 4 |   ❌    |
