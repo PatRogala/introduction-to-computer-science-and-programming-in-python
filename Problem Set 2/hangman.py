@@ -99,33 +99,43 @@ def get_available_letters(letters_guessed):
 
 
 def hangman(secret_word):
-    '''
-    secret_word: string, the secret word to guess.
+    guesses_left = 6
+    warnings_left = 3
 
-    Starts up an interactive game of Hangman.
+    letters_guessed = []
 
-    * At the start of the game, let the user know how many
-      letters the secret_word contains and how many guesses s/he starts with.
+    print("Welcome to the game Hangman!")
+    print("I am thinking of a word that is", len(secret_word), "letters long.")
 
-    * The user should start with 6 guesses
+    while guesses_left > 0 and not is_word_guessed(secret_word, letters_guessed):
+        print("-------------")
+        print("You have", warnings_left, "warnings left.")
+        print("You have", guesses_left, "guesses left.")
+        print("Available letters:", get_available_letters(letters_guessed))
+        guess = input("Please guess a letter: ").lower()
+        if not guess.isalpha():
+            print("Oops! That is not a valid letter. You have", warnings_left, "warnings left:", get_guessed_word(secret_word, letters_guessed))
+            if warnings_left > 0: warnings_left -= 1
+            else: guesses_left -= 1
+        elif guess in letters_guessed:
+            print("Oops! You've already guessed that letter:", get_guessed_word(secret_word, letters_guessed))
+            if warnings_left > 0: warnings_left -= 1
+            else: guesses_left -= 1
+        elif guess in secret_word:
+            letters_guessed.append(guess)
+            print("Good guess:", get_guessed_word(secret_word, letters_guessed))
+        else:
+            print("ops! That letter is not in my word:", get_guessed_word(secret_word, letters_guessed))
+            guesses_left -= 1
+            letters_guessed.append(guess)
 
-    * Before each round, you should display to the user how many guesses
-      s/he has left and the letters that the user has not yet guessed.
-
-    * Ask the user to supply one guess per round. Remember to make
-      sure that the user puts in a letter!
-
-    * The user should receive feedback immediately after each guess
-      about whether their guess appears in the computer's word.
-
-    * After each guess, you should display to the user the
-      partially guessed word so far.
-
-    Follows the other limitations detailed in the problem write-up.
-    '''
-    # FILL IN YOUR CODE HERE AND DELETE "pass"
-    pass
-
+    print("-------------")
+    if is_word_guessed(secret_word, letters_guessed):
+        total_score = guesses_left * len(set(secret_word))
+        print("Good guess:", get_guessed_word(secret_word, letters_guessed))
+        print("Your total score for this game is:", total_score)
+    else:
+        print("Sorry, you ran out of guesses. The word was", secret_word)
 
 
 # When you've completed your hangman function, scroll down to the bottom
