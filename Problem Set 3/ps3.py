@@ -265,7 +265,8 @@ def play_hand(hand, word_list):
     total_score = 0
 
     while calculate_handlen(hand) > 0:
-        print('Current Hand:', display_hand(hand))
+        print('Current Hand:', end=' ')
+        display_hand(hand)
         word = input('Enter word, or "!!" to indicate that you are finished: ')
 
         if word == '!!':
@@ -318,8 +319,16 @@ def substitute_hand(hand, letter):
     letter: string
     returns: dictionary (string -> int)
     """
+    new_hand = hand.copy()
+    if letter in new_hand.keys():
+        del new_hand[letter]
+        while True:
+            new_letter = random.choice(VOWELS + CONSONANTS)
+            if new_letter not in new_hand:
+                break
+        new_hand[new_letter] = hand[letter]
 
-    pass  # TO DO... Remove this line when you implement this function
+    return new_hand
 
 
 def play_game(word_list):
@@ -353,7 +362,31 @@ def play_game(word_list):
     word_list: list of lowercase strings
     """
 
-    print("play_game not implemented.") # TO DO... Remove this line when you implement this function
+    total_hands = int(input('Enter total number of hands: '))
+    total_score = 0
+    substitute = True
+    replay = True
+
+    while total_hands > 0:
+        hand = deal_hand(HAND_SIZE)
+        print('Current Hand:', end=' ')
+        display_hand(hand)
+
+        if substitute:
+            if input('Would you like to substitute a letter? ') == 'yes':
+                letter = input('Which letter would you like to replace: ')
+                hand = substitute_hand(hand, letter)
+                substitute = False
+
+        play_hand(hand, word_list)
+        if replay:
+            if input('Would you like to replay the hand? ') == 'yes':
+                play_hand(hand, word_list)
+                replay = False
+
+        total_hands -= 1
+
+    print(f'Total score over all hands: {total_score}')
 
 
 
