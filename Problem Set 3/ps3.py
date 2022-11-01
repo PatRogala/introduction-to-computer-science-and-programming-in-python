@@ -94,7 +94,7 @@ def get_word_score(word, n):
     word_points = 0
 
     for letter in word:
-        word_points += SCRABBLE_LETTER_VALUES[letter.lower()]
+        word_points += SCRABBLE_LETTER_VALUES.get(letter.lower(), 0)
 
     word_length = len(word)
     word_score = word_points * max(1, 7 * word_length - 3 * (n - word_length))
@@ -140,7 +140,7 @@ def deal_hand(n):
     """
 
     hand={}
-    num_vowels = int(math.ceil(n / 3))
+    num_vowels = int(math.ceil(n / 3)) - 1
 
     for i in range(num_vowels):
         x = random.choice(VOWELS)
@@ -149,6 +149,8 @@ def deal_hand(n):
     for i in range(num_vowels, n):
         x = random.choice(CONSONANTS)
         hand[x] = hand.get(x, 0) + 1
+
+    hand['*'] = 1
 
     return hand
 
@@ -200,6 +202,13 @@ def is_valid_word(word, hand, word_list):
     """
     word = word.lower()
     word_dict = get_frequency_dict(word)
+
+    if '*' in word:
+        for vowel in VOWELS:
+            if word.replace('*', vowel) in word_list:
+                return True
+        else:
+            return False
 
     if word not in word_list:
         return False
