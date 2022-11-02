@@ -127,8 +127,13 @@ class TimeTrigger(Trigger):
     def get_time(self): return self.time
 
 # Problem 6
-# TODO: BeforeTrigger and AfterTrigger
+class BeforeTrigger(TimeTrigger):
+    def evaluate(self, story):
+        return story.get_pubdate() < self.get_time()
 
+class AfterTrigger(TimeTrigger):
+    def evaluate(self, story):
+        return story.get_pubdate() > self.get_time()
 
 # COMPOSITE TRIGGERS
 
