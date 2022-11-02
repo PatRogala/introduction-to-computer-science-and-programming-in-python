@@ -209,11 +209,29 @@ def read_trigger_config(filename):
         if not (len(line) == 0 or line.startswith('//')):
             lines.append(line)
 
-    # TODO: Problem 11
-    # line is the list of lines that you need to parse and for which you need
-    # to build triggers
+    trigger_dict = {}
+    trigger_list = []
 
-    print(lines) # for now, print it so you see what it contains!
+    for line in lines:
+        line = line.split(',')
+        if line[0] == 'ADD':
+            for trigger_name in line[1:]:
+                trigger_list.append(trigger_dict[trigger_name])
+        else:
+            if line[1] == 'TITLE':
+                trigger_dict[line[0]] = TitleTrigger(line[2])
+            elif line[1] == 'DESCRIPTION':
+                trigger_dict[line[0]] = DescriptionTrigger(line[2])
+            elif line[1] == 'AFTER':
+                trigger_dict[line[0]] = AfterTrigger(line[2])
+            elif line[1] == 'BEFORE':
+                trigger_dict[line[0]] = BeforeTrigger(line[2])
+            elif line[1] == 'NOT':
+                trigger_dict[line[0]] = NotTrigger(trigger_dict[line[2]])
+            elif line[1] == 'AND':
+                trigger_dict[line[0]] = AndTrigger(trigger_dict[line[2]], trigger_dict[line[3]])
+            elif line[1] == 'OR':
+                trigger_dict[line[0]] = OrTrigger(trigger_dict[line[2]], trigger_dict[line[3]])
 
 
 
