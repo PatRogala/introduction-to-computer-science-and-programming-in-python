@@ -89,19 +89,28 @@ class PhraseTrigger(Trigger):
         self.phrase = phrase
 
     def is_phrase_in(self, text):
-        phrase = self.phrase
         text = text.lower()
-        phrase = phrase.lower()
-        phrase = phrase.split()
+        phrase = self.phrase.lower()
+
+        for punctuation in string.punctuation:
+            text = text.replace(punctuation, ' ')
+            phrase = phrase.replace(punctuation, ' ')
+
         text = text.split()
-        for i in range(len(text)):
-            if text[i] == phrase[0]:
-                if text[i:i+len(phrase)] == phrase:
-                    return True
+        phrase = phrase.split()
+
+        if len(phrase) > len(text):
+            return False
+
+        for i in range(len(text) - len(phrase) + 1):
+            if text[i:i+len(phrase)] == phrase:
+                return True
         return False
 
 # Problem 3
-# TODO: TitleTrigger
+class TitleTrigger(PhraseTrigger):
+    def evaluate(self, story):
+        return self.is_phrase_in(story.get_title())
 
 # Problem 4
 # TODO: DescriptionTrigger
